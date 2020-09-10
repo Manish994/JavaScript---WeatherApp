@@ -6,7 +6,7 @@ const descElement = document.querySelector(".temperature-description p");
 const locElement = document.querySelector(".location p");
 //
 //Creating Object Property
-const weather = {};
+let weather = {};
 weather.temperature = {
    unit: "celsius",
 }
@@ -14,7 +14,7 @@ weather.temperature = {
 //Api Response temp Value is in Kelvin
 //then convert kelvin into Celsius
 const kelvin = 273;
-const apiKey = "82005d27a116c2880c8f0fcb866998a0";
+const apiKey = "810f63a0987e7a30642df2d648f8043d";
 
 //
 //Check if browser support geolocation
@@ -37,5 +37,30 @@ function showError(error) {
 }
 
 function getWeather(latitude, longitude) {
+   let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
 
+   //Request to website and response in JSON Format
+   fetch(api)
+      .then(function (response) {
+         let data = response.json();
+         return data;
+      })
+      .then(function (data) {
+         weather.temperature.value = Math.floor(data.main.temp - kelvin);
+         weather.description = data.weather[0].description;
+         weather.iconId = data.weather[0].icon;
+         weather.city = data.name;
+         weather.country = data.sys.country;
+      })
+      .then(function () {
+         displayWeather();
+      })
+}
+
+//Display weather to the user Interface
+function displayWeather() {
+   iconElement.innerHTML = `<img src="icons/${weather.iconId}.png"/>`;
+   tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+   descElement.innerHTML = `${weather.description}`;
+   locElement.innerHTML = `${weather.city}, ${weather.country}`;
 }
