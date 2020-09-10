@@ -15,6 +15,8 @@ weather.temperature = {
 //then convert kelvin into Celsius
 const kelvin = 273;
 const apiKey = "810f63a0987e7a30642df2d648f8043d";
+//userName=paulsimon227@gamil.com
+//password:123456789
 
 //
 //Check if browser support geolocation
@@ -64,3 +66,26 @@ function displayWeather() {
    descElement.innerHTML = `${weather.description}`;
    locElement.innerHTML = `${weather.city}, ${weather.country}`;
 }
+
+//
+//When the user click on tempElement then change into 
+//celsius to fahrenheit and fahrenheit to celsius
+function celsiusToFahrenheit(temperature) {
+   return (temperature * 9 / 5) + 32;
+}
+tempElement.addEventListener('click', function () {
+   if (weather.temperature.value === undefined)
+      return;
+
+   if (weather.temperature.unit === "celsius") {
+      let fahrenheit = celsiusToFahrenheit(weather.temperature.value);
+      //can exist decimal number so used Math.floor 
+      //Which ignore number after decimal
+      fahrenheit = Math.floor(fahrenheit);
+      tempElement.innerHTML = `${fahrenheit}°<span>F</span>`;
+      weather.temperature.unit = "fahrenheit";
+   } else {
+      tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+      weather.temperature.unit = "celsius";
+   }
+})
